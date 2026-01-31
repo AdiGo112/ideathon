@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext.jsx';
 import '../styles/Styles.css';
 
 const Navbar = () => {
-  const { currentUser } = useApp();
+  const { user: currentUser, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [openMenu, setOpenMenu] = useState(null); // 'filters' | 'announcements' | 'chat' | 'profile'
   const navigate = useNavigate();
@@ -19,6 +20,11 @@ const Navbar = () => {
 
   const toggleMenu = (menu) => {
     setOpenMenu(prev => (prev === menu ? null : menu));
+  };
+
+  const handleLogout = () => {
+    logout();          // clears context + localStorage
+    navigate('/login'); // kick user out
   };
 
   return (

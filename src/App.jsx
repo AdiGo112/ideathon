@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom"
-import { useAuth } from "./context/AuthContext"
+import { useAuth } from "./context/AuthContext.jsx"
 import Login from "./pages/Login"
-import Layout from "./components/layout/Layout"
+import Layout from "./components/Layout"
 import TnpDashboard from "./pages/tnp/TnpDashboard"
 
 export default function App() {

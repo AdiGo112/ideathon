@@ -2,7 +2,7 @@ import { useState } from "react"
 import { jobs as initialJobs } from "../../data/jobs"
 import JobCard from "./JobCard"
 import AddJobModal from "./AddJobModal"
-import { useAuth } from "../../context/AuthContext"
+import { useAuth } from "../../context/AuthContext.jsx"
 
 export default function TnpDashboard() {
   const [jobs, setJobs] = useState(initialJobs)

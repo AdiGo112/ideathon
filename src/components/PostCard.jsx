@@ -1,9 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import '../styles/Styles.css';
 
 const PostCard = ({ post }) => {
+  const navigate = useNavigate();
+
   const { 
     currentUser, 
     toggleUpvote, 
@@ -17,55 +19,66 @@ const PostCard = ({ post }) => {
   const author = getUserById(post.authorId);
   const community = post.communityId ? getCommunityById(post.communityId) : null;
   const company = post.companyId ? getCompanyById(post.companyId) : null;
+
   const hasUpvoted = post.upvotes.includes(currentUser.id);
   const isBookmarked = bookmarkedPosts.includes(post.id);
 
+  const goToPost = () => {
+    navigate(`/post/${post.id}`);
+  };
+
   const handleUpvote = (e) => {
-    e.preventDefault();
     e.stopPropagation();
     toggleUpvote(post.id);
   };
 
   const handleDownvote = (e) => {
-    e.preventDefault();
     e.stopPropagation();
-    // Downvote disabled for announcements
     if (post.postType !== 'Announcement') {
       toggleUpvote(post.id);
     }
   };
 
   const handleBookmark = (e) => {
-    e.preventDefault();
     e.stopPropagation();
     toggleBookmark(post.id);
+  };
+
+  const goToCommunity = (e) => {
+    e.stopPropagation();
+    navigate(`/community/${community.id}`);
   };
 
   const formatTimeAgo = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
     const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
-    
+
     if (diffInHours < 1) return 'Just now';
     if (diffInHours < 24) return `${diffInHours} hours ago`;
     const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays === 1) return '1 day ago';
-    return `${diffInDays} days ago`;
+    return diffInDays === 1 ? '1 day ago' : `${diffInDays} days ago`;
   };
 
   return (
-    <Link to={`/post/${post.id}`} className={`post-card ${post.isPinned ? 'pinned' : ''}`}>
+    <div
+      className={`post-card ${post.isPinned ? 'pinned' : ''}`}
+      onClick={goToPost}
+      role="button"
+    >
       {/* Vote section */}
       <div className="vote-section">
-        <button 
+        <button
           className={`vote-btn upvote ${hasUpvoted ? 'active' : ''}`}
           onClick={handleUpvote}
           aria-label="Upvote"
         >
           ▲
         </button>
+
         <div className="vote-score">{post.upvotes.length}</div>
-        <button 
+
+        <button
           className="vote-btn downvote"
           onClick={handleDownvote}
           disabled={post.postType === 'Announcement'}
@@ -78,28 +91,27 @@ const PostCard = ({ post }) => {
       {/* Post content */}
       <div className="post-content">
         <div className="post-header">
-          {post.isPinned && (
-            <span className="pinned-badge">📌 Pinned</span>
-          )}
+          {post.isPinned && <span className="pinned-badge">📌 Pinned</span>}
+
           <span className={`post-tag ${post.postType.toLowerCase().replace(' ', '-')}`}>
             {post.postType}
           </span>
-          {company && (
-            <span className="company-tag">{company.name}</span>
-          )}
+
+          {company && <span className="company-tag">{company.name}</span>}
+
           {community && (
-            <Link 
-              to={`/community/${community.id}`} 
-              className="community-tag"
-              onClick={(e) => e.stopPropagation()}
-            >
+            <button className="community-tag" onClick={goToCommunity}>
               {community.name}
-            </Link>
+            </button>
           )}
         </div>
 
         <h3 className="post-title">{post.title}</h3>
-        <p className="post-preview">{post.content.substring(0, 200)}{post.content.length > 200 ? '...' : ''}</p>
+
+        <p className="post-preview">
+          {post.content.substring(0, 200)}
+          {post.content.length > 200 && '...'}
+        </p>
 
         <div className="post-footer">
           <div className="author-info">
@@ -107,15 +119,14 @@ const PostCard = ({ post }) => {
             <span className="author-role-badge" data-role={author.role.toLowerCase()}>
               {author.role}
             </span>
-            {author.batch && (
-              <span className="author-batch">Batch {author.batch}</span>
-            )}
+            {author.batch && <span className="author-batch">Batch {author.batch}</span>}
           </div>
-          
+
           <div className="post-meta">
-            <span className="comments-count">💬 {post.comments.length} comments</span>
-            <span className="timestamp">{formatTimeAgo(post.createdAt)}</span>
-            <button 
+            <span>💬 {post.comments.length} comments</span>
+            <span>{formatTimeAgo(post.createdAt)}</span>
+
+            <button
               className={`bookmark-btn ${isBookmarked ? 'active' : ''}`}
               onClick={handleBookmark}
               aria-label="Bookmark"
@@ -125,7 +136,7 @@ const PostCard = ({ post }) => {
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

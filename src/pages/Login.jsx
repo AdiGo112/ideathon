@@ -1,7 +1,7 @@
 import { useState } from "react"
-import { useAuth } from "../context/AuthContext"
+import { useAuth } from "../context/AuthContext.jsx"
 import { useNavigate } from "react-router-dom"
-import "../styles/login.css"
+import "../styles/Styles.css"
 
 export default function Login() {
   const [identifier, setIdentifier] = useState("")
