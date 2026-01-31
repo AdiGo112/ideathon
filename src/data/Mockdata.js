@@ -5,12 +5,12 @@ export const currentUser = {
   id: 1,
   name: "Aditya",
   role: "Student",
-  batch: 2026
+  batch: 2027
 };
 
 // Users database
 export const users = [
-  { id: 1, name: "Aditya", role: "Student", batch: 2026 },
+  { id: 1, name: "Aditya", role: "Student", batch: 2027 },
   { id: 2, name: "Rahul Mehta", role: "Alumni", batch: 2022 },
   { id: 3, name: "Dr. Priya Sharma", role: "Faculty", batch: null },
   { id: 4, name: "Ananya Reddy", role: "Student", batch: 2027 },
@@ -184,7 +184,7 @@ export const initialPosts = [
     postType: "Announcement",
     upvotes: [2, 4, 5, 6, 7, 8],
     comments: [],
-    createdAt: "2024-01-30T10:00:00Z",
+    createdAt: "2026-01-30T10:00:00Z",
     isPinned: true
   },
   {
@@ -197,7 +197,7 @@ export const initialPosts = [
     postType: "Interview Experience",
     upvotes: [1, 4, 6, 7, 8, 10],
     comments: [],
-    createdAt: "2024-01-30T05:00:00Z",
+    createdAt: "2026-01-30T05:00:00Z",
     isPinned: false
   },
   {
@@ -210,7 +210,7 @@ export const initialPosts = [
     postType: "Question",
     upvotes: [1, 2, 6, 8],
     comments: [],
-    createdAt: "2024-01-29T16:00:00Z",
+    createdAt: "2026-01-29T16:00:00Z",
     isPinned: false
   },
   {
@@ -223,7 +223,7 @@ export const initialPosts = [
     postType: "Question",
     upvotes: [1, 6],
     comments: [],
-    createdAt: "2024-01-29T12:00:00Z",
+    createdAt: "2026-01-29T12:00:00Z",
     isPinned: false
   },
   {
@@ -236,7 +236,7 @@ export const initialPosts = [
     postType: "Interview Experience",
     upvotes: [1, 4, 7, 8],
     comments: [],
-    createdAt: "2024-01-28T14:00:00Z",
+    createdAt: "2025-12-28T14:00:00Z",
     isPinned: false
   },
   {
@@ -249,7 +249,7 @@ export const initialPosts = [
     postType: "Question",
     upvotes: [1, 2, 5, 6, 8],
     comments: [],
-    createdAt: "2024-01-28T10:00:00Z",
+    createdAt: "2026-01-28T10:00:00Z",
     isPinned: false
   },
   {
@@ -262,7 +262,7 @@ export const initialPosts = [
     postType: "Announcement",
     upvotes: [1, 4, 6, 7, 8],
     comments: [],
-    createdAt: "2024-01-27T09:00:00Z",
+    createdAt: "2026-01-27T09:00:00Z",
     isPinned: false
   },
   {
@@ -275,7 +275,7 @@ export const initialPosts = [
     postType: "Question",
     upvotes: [1, 2, 5, 10],
     comments: [],
-    createdAt: "2024-01-27T07:00:00Z",
+    createdAt: "2026-01-27T07:00:00Z",
     isPinned: false
   },
   {

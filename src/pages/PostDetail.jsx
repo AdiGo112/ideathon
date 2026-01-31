@@ -1,218 +1,186 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
-import PostCard from '../components/PostCard';
-import '../styles/Styles.css';
+import Comment from '../components/Comment';
+import '../styles/styles.css';
 
-const Home = () => {
-  const { posts, communities, companies, joinedCommunities } = useApp();
-  const [filterCompany, setFilterCompany] = useState('all');
-  const [filterPostType, setFilterPostType] = useState('all');
-  const [filterBatch, setFilterBatch] = useState('all');
+const PostDetail = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { 
+    getPostById, 
+    getUserById, 
+    getCommunityById, 
+    getCompanyById,
+    currentUser,
+    toggleUpvote,
+    addComment,
+    toggleBookmark,
+    bookmarkedPosts
+  } = useApp();
 
-  // Filter posts
-  const filteredPosts = posts.filter(post => {
-    if (filterCompany !== 'all' && post.companyId !== parseInt(filterCompany)) {
-      return false;
+  const [commentText, setCommentText] = useState('');
+
+  const post = getPostById(id);
+
+  if (!post) {
+    return (
+      <div className="post-detail-page">
+        <div className="post-not-found">
+          <h2>Post not found</h2>
+          <button onClick={() => navigate('/')}>Go Home</button>
+        </div>
+      </div>
+    );
+  }
+
+  const author = getUserById(post.authorId);
+  const community = post.communityId ? getCommunityById(post.communityId) : null;
+  const company = post.companyId ? getCompanyById(post.companyId) : null;
+  const hasUpvoted = post.upvotes.includes(currentUser.id);
+  const isBookmarked = bookmarkedPosts.includes(post.id);
+
+  const handleUpvote = () => {
+    toggleUpvote(post.id);
+  };
+
+  const handleAddComment = (e) => {
+    e.preventDefault();
+    if (commentText.trim()) {
+      addComment(post.id, commentText.trim());
+      setCommentText('');
     }
-    if (filterPostType !== 'all' && post.postType !== filterPostType) {
-      return false;
-    }
-    if (filterBatch === 'my-batch') {
-      const author = post.authorId;
-      // Show posts from user's batch (2026) or from faculty/pinned
-      const postAuthor = useApp().getUserById(author);
-      if (postAuthor.batch !== 2026 && postAuthor.role !== 'Faculty' && !post.isPinned) {
-        return false;
-      }
-    }
-    return true;
-  });
+  };
 
-  // Sort: pinned first
-  const sortedPosts = [...filteredPosts].sort((a, b) => {
-    if (a.isPinned && !b.isPinned) return -1;
-    if (!a.isPinned && b.isPinned) return 1;
-    return 0;
-  });
+  const handleBookmark = () => {
+    toggleBookmark(post.id);
+  };
 
-  // Get trending posts (most upvotes in last 3 days)
-  const threeDaysAgo = new Date();
-  threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
-  
-  const trendingPosts = [...posts]
-    .filter(post => new Date(post.createdAt) > threeDaysAgo)
-    .sort((a, b) => b.upvotes.length - a.upvotes.length)
-    .slice(0, 5);
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
 
   return (
-    <div className="home-page">
-      {/* Left Sidebar */}
-      <aside className="left-sidebar">
-        <div className="sidebar-section">
-          <Link to="/" className="nav-item active">
-            <span className="nav-icon">🏠</span>
-            Home
-          </Link>
-        </div>
-
-        <div className="sidebar-section">
-          <div className="section-title">Communities</div>
-          {communities.slice(0, 4).map(community => (
-            <Link 
-              key={community.id} 
-              to={`/community/${community.id}`}
-              className="nav-item"
+    <div className="post-detail-page">
+      <div className="post-detail-container">
+        <div className="post-detail-card">
+          {/* Vote section */}
+          <div className="post-vote-section">
+            <button 
+              className={`vote-btn upvote ${hasUpvoted ? 'active' : ''}`}
+              onClick={handleUpvote}
+              aria-label="Upvote"
             >
-              <span className="nav-icon">👥</span>
-              <div className="community-info">
-                <div className="community-name">{community.name}</div>
-                <div className="community-members">
-                  {community.memberCount.toLocaleString()} members
-                </div>
-              </div>
-            </Link>
-          ))}
-          <Link to="/communities" className="nav-item view-all">
-            View All Communities →
-          </Link>
-        </div>
-
-        <div className="sidebar-section">
-          <Link to="/companies" className="nav-item">
-            <span className="nav-icon">🏢</span>
-            Companies
-          </Link>
-          <Link to="/resources" className="nav-item">
-            <span className="nav-icon">📚</span>
-            Resources
-          </Link>
-          <Link to="/bookmarks" className="nav-item">
-            <span className="nav-icon">🔖</span>
-            Bookmarks
-          </Link>
-        </div>
-      </aside>
-
-      {/* Center Feed */}
-      <main className="center-feed">
-        <div className="feed-header">
-          <h2>Popular Posts</h2>
-        </div>
-
-        {sortedPosts.length === 0 ? (
-          <div className="no-posts">
-            <p>No posts match your filters.</p>
+              ▲
+            </button>
+            <div className="vote-score">{post.upvotes.length}</div>
+            <button 
+              className="vote-btn downvote"
+              onClick={handleUpvote}
+              disabled={post.postType === 'Announcement'}
+              aria-label="Downvote"
+            >
+              ▼
+            </button>
           </div>
-        ) : (
-          sortedPosts.map(post => (
-            <PostCard key={post.id} post={post} />
-          ))
-        )}
-      </main>
 
-      {/* Right Sidebar */}
-      <aside className="right-sidebar">
-        {/* Announcements */}
-        <div className="sidebar-card announcements">
-          <div className="card-header">
-            <span className="card-icon">📢</span>
-            <h3>Announcements</h3>
-          </div>
-          <div className="card-content">
-            {posts
-              .filter(post => post.postType === 'Announcement')
-              .slice(0, 3)
-              .map(post => (
-                <Link 
-                  key={post.id} 
-                  to={`/post/${post.id}`}
-                  className="announcement-item"
-                >
-                  <div className="announcement-text">{post.title}</div>
+          {/* Post content */}
+          <div className="post-detail-content">
+            <div className="post-detail-header">
+              {post.isPinned && (
+                <span className="pinned-badge">📌 Pinned</span>
+              )}
+              <span className={`post-tag ${post.postType.toLowerCase().replace(' ', '-')}`}>
+                {post.postType}
+              </span>
+              {company && (
+                <Link to={`/company/${company.id}`} className="company-tag">
+                  {company.name}
                 </Link>
+              )}
+              {community && (
+                <Link to={`/community/${community.id}`} className="community-tag">
+                  {community.name}
+                </Link>
+              )}
+            </div>
+
+            <h1 className="post-detail-title">{post.title}</h1>
+
+            <div className="post-detail-meta">
+              <span className="author-name">{author.name}</span>
+              <span className="author-role-badge" data-role={author.role.toLowerCase()}>
+                {author.role}
+              </span>
+              {author.batch && (
+                <span className="author-batch">Batch {author.batch}</span>
+              )}
+              <span className="post-timestamp">{formatDate(post.createdAt)}</span>
+            </div>
+
+            <div className="post-detail-body">
+              {post.content.split('\n').map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
               ))}
-          </div>
-        </div>
+            </div>
 
-        {/* Trending */}
-        <div className="sidebar-card trending">
-          <div className="card-header">
-            <span className="card-icon">🔥</span>
-            <h3>Trending This Week</h3>
-          </div>
-          <div className="card-content">
-            {trendingPosts.map((post, index) => (
-              <Link 
-                key={post.id}
-                to={`/post/${post.id}`}
-                className="trending-item"
-              >
-                <span className="trending-number">{index + 1}</span>
-                <span className="trending-text">{post.title}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Filters */}
-        <div className="sidebar-card filters">
-          <div className="card-header">
-            <span className="card-icon">🔍</span>
-            <h3>Filters</h3>
-          </div>
-          <div className="card-content">
-            <div className="filter-group">
-              <label>Batch Filter</label>
-              <div className="filter-buttons">
-                <button 
-                  className={`filter-btn ${filterBatch === 'all' ? 'active' : ''}`}
-                  onClick={() => setFilterBatch('all')}
-                >
-                  All
-                </button>
-                <button 
-                  className={`filter-btn ${filterBatch === 'my-batch' ? 'active' : ''}`}
-                  onClick={() => setFilterBatch('my-batch')}
-                >
-                  My Batch
-                </button>
+            <div className="post-detail-actions">
+              <div className="action-stats">
+                <span>{post.upvotes.length} upvotes</span>
+                <span>{post.comments.length} comments</span>
               </div>
-            </div>
-
-            <div className="filter-group">
-              <label>Company</label>
-              <select 
-                value={filterCompany} 
-                onChange={(e) => setFilterCompany(e.target.value)}
+              <button 
+                className={`bookmark-action ${isBookmarked ? 'active' : ''}`}
+                onClick={handleBookmark}
               >
-                <option value="all">All Companies</option>
-                {companies.map(company => (
-                  <option key={company.id} value={company.id}>
-                    {company.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="filter-group">
-              <label>Post Type</label>
-              <select 
-                value={filterPostType} 
-                onChange={(e) => setFilterPostType(e.target.value)}
-              >
-                <option value="all">All Types</option>
-                <option value="Interview Experience">Interview Experience</option>
-                <option value="Question">Question</option>
-                <option value="Announcement">Announcement</option>
-                <option value="Discussion">Discussion</option>
-              </select>
+                {isBookmarked ? '🔖 Bookmarked' : '🏷️ Bookmark'}
+              </button>
             </div>
           </div>
         </div>
-      </aside>
+
+        {/* Comments section */}
+        <div className="comments-section">
+          <h2>Comments ({post.comments.length})</h2>
+
+          {/* Add comment form */}
+          <form onSubmit={handleAddComment} className="add-comment-form">
+            <textarea
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              placeholder="Share your thoughts..."
+              rows="4"
+            />
+            <button type="submit" disabled={!commentText.trim()}>
+              Add Comment
+            </button>
+          </form>
+
+          {/* Comments list */}
+          <div className="comments-list">
+            {post.comments.length === 0 ? (
+              <p className="no-comments">No comments yet. Be the first to comment!</p>
+            ) : (
+              post.comments.map(comment => (
+                <Comment 
+                  key={comment.id} 
+                  comment={comment} 
+                  postId={post.id}
+                />
+              ))
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Home;
+export default PostDetail;

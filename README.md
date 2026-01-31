@@ -1,6 +1,6 @@
 # BatchWise - Interactive University Discussion Platform
 
-A fully interactive Reddit-style frontend prototype for university students, alumni, and faculty. Built with React, React Router, and plain CSS - **no backend, no database, all in-memory data**.
+A fully interactive frontend prototype for university students, alumni, and faculty. Built with React, React Router, and plain CSS.
 
 ## 🎯 Overview
 
