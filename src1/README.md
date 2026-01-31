@@ -1,10 +1,10 @@
-# CampusLoop - University Discussion Platform Prototype
+# BatchWise - University Discussion Platform Prototype
 
 A Reddit-style frontend prototype for a university-only discussion platform. This is a **frontend-only** demo with no backend, authentication, or API calls - perfect for showcasing UX and layout design.
 
 ## 🎯 Project Overview
 
-CampusLoop is designed to be a familiar yet purpose-built platform for university students, alumni, and faculty to discuss internships, share interview experiences, and connect around career opportunities.
+BatchWise is designed to be a familiar yet purpose-built platform for university students, alumni, and faculty to discuss internships, share interview experiences, and connect around career opportunities.
 
 ## 🚀 Quick Start
 
@@ -14,8 +14,8 @@ Simply open `index.html` in your browser. No build process, no dependencies, no 
 
 ```
 ├── index.html          # Complete standalone app (React via CDN)
-├── campusloop.jsx      # React component (for reference/development)
-├── campusloop.css      # Stylesheet (for reference/development)
+├── BatchWise.jsx      # React component (for reference/development)
+├── BatchWise.css      # Stylesheet (for reference/development)
 └── README.md          # This file
 ```
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './campusloop.css';
+import './BatchWise.css';
 
 // Mock data for posts
 const MOCK_POSTS = [
@@ -132,7 +132,7 @@ const TRENDING = [
   "Open source contributions"
 ];
 
-export default function CampusLoop() {
+export default function BatchWise() {
   const [posts, setPosts] = useState(MOCK_POSTS);
   const [filter, setFilter] = useState('All');
   const [selectedCompany, setSelectedCompany] = useState('All Companies');
@@ -167,21 +167,21 @@ export default function CampusLoop() {
   });
 
   return (
-    <div className="campus-loop">
+    <div className="BatchWise">
       {/* Top Navbar */}
       <nav className="navbar">
         <div className="navbar-content">
           <div className="navbar-left">
             <div className="logo">
               <span className="logo-icon">🎓</span>
-              <span className="logo-text">CampusLoop</span>
+              <span className="logo-text">BatchWise</span>
             </div>
           </div>
           
           <div className="navbar-center">
             <div className="search-bar">
               <span className="search-icon">🔍</span>
-              <input type="text" placeholder="Search CampusLoop" />
+              <input type="text" placeholder="Search BatchWise" />
             </div>
           </div>
           

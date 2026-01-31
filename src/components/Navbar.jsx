@@ -22,7 +22,7 @@ const Navbar = () => {
         <div className="navbar-left">
           <Link to="/" className="logo">
             <span className="logo-icon">🎓</span>
-            <span className="logo-text">CampusLoop</span>
+            <span className="logo-text">BatchWise</span>
           </Link>
         </div>
         

@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CampusLoop - University Discussion Platform</title>
+  <title>BatchWise - University Discussion Platform</title>
   <style>
     /* 
-     * CampusLoop CSS
+     * BatchWise CSS
      * Reddit-inspired design: light gray background, white content cards,
      * minimal shadows, compact information-dense layout
      */
@@ -845,7 +845,7 @@
       "Open source contributions"
     ];
 
-    function CampusLoop() {
+    function BatchWise() {
       const [posts, setPosts] = useState(MOCK_POSTS);
       const [filter, setFilter] = useState('All');
       const [selectedCompany, setSelectedCompany] = useState('All Companies');
@@ -880,21 +880,21 @@
       });
 
       return (
-        <div className="campus-loop">
+        <div className="BatchWise">
           {/* Top Navbar */}
           <nav className="navbar">
             <div className="navbar-content">
               <div className="navbar-left">
                 <div className="logo">
                   <span className="logo-icon">🎓</span>
-                  <span className="logo-text">CampusLoop</span>
+                  <span className="logo-text">BatchWise</span>
                 </div>
               </div>
               
               <div className="navbar-center">
                 <div className="search-bar">
                   <span className="search-icon">🔍</span>
-                  <input type="text" placeholder="Search CampusLoop" />
+                  <input type="text" placeholder="Search BatchWise" />
                 </div>
               </div>
               
@@ -1114,7 +1114,7 @@
     }
 
     const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<CampusLoop />);
+    root.render(<BatchWise />);
   </script>
 </body>
 </html>

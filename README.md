@@ -126,7 +126,7 @@ BatchWise is a comprehensive frontend prototype that simulates a fully working d
 
 ```bash
 # Navigate to project directory
-cd campusloop-app
+cd BatchWise-app
 
 # Install dependencies
 npm install
@@ -146,7 +146,7 @@ The app will be available at `http://localhost:5173`
 ## 📁 Project Structure
 
 ```
-campusloop-app/
+BatchWise-app/
 ├── src/
 │   ├── components/
 │   │   ├── Navbar.jsx          # Top navigation with search
@@ -363,6 +363,6 @@ MIT License - feel free to use this project however you'd like.
 
 ---
 
-**Built with ❤️ as a frontend prototype for CampusLoop**
+**Built with ❤️ as a frontend prototype for BatchWise**
 
 Questions? Issues? Fork it and make it your own!

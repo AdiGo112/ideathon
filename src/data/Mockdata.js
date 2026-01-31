@@ -1,4 +1,4 @@
-// Mock data for CampusLoop prototype
+// Mock data for BatchWise prototype
 
 // Current logged-in user
 export const currentUser = {
